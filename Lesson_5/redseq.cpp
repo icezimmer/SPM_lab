@@ -4,6 +4,7 @@
 
 #include <chrono>
 void active_delay(int msecs) {
+	// add delay of msecs time
   // read current time
   auto start = std::chrono::high_resolution_clock::now();
   auto end   = false;
@@ -28,16 +29,19 @@ int main(int argc, char * argv[]) {
     v[i] = rand() % 8;
     std::cout << v[i] << " ";
   }
-  std::cout << std::endl;
+  std::cout << std::endl; // endline
 
   {
-    utimer u("reduce");
+    utimer u("reduce"); // compute the elapsed time of this computation block
     auto oplus = [](const int& x, const int& y) {
-		   auto r = x + y;
-		   active_delay(1);
-		   return(r);
-		 };
+			// variables with & are accessible by reference
+			// const specify that the variable is not modifiable
+		  auto r = x + y;
+		  active_delay(1); // add a delay of 1 msec
+		  return(r);
+		};
 
+		//accumulate the operation oplus from the begin to the end of the vector
     auto res = std::accumulate(v.begin(), v.end(), 0, oplus);
     std::cout << res << std::endl;
   }
