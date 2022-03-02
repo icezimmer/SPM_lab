@@ -33,7 +33,7 @@ int main(int argc, char * argv[]) {
 
 	{
 	utimer u("reduce"); // compute the elapsed time of this computation block
-    auto oplus = [](const int& x, const int& y) {
+	auto oplus = [](const int& x, const int& y) {
 		// variables with & are accessible by reference
 		// const specify that the variable is not modifiable
 		auto r = x + y;
