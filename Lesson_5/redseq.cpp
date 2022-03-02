@@ -20,30 +20,30 @@ void active_delay(int msecs) {
 #include "utimer.cpp"
 
 int main(int argc, char * argv[]) {
-  int n = atoi(argv[1]); // vector lenght
-  int seed = atoi(argv[2]); // seed
-  srand(seed);
+	int n = atoi(argv[1]); // vector lenght
+	int seed = atoi(argv[2]); // seed
+	srand(seed);
 
-  std::vector<int> v(n);
-  for(int i=0; i<n; i++) {
-    v[i] = rand() % 8;
-    std::cout << v[i] << " ";
+	std::vector<int> v(n);
+	for(int i=0; i<n; i++) {
+		v[i] = rand() % 8;
+		std::cout << v[i] << " ";
   }
-  std::cout << std::endl; // endline
+	std::cout << std::endl; // endline
 
   {
-    utimer u("reduce"); // compute the elapsed time of this computation block
+		utimer u("reduce"); // compute the elapsed time of this computation block
     auto oplus = [](const int& x, const int& y) {
 			// variables with & are accessible by reference
 			// const specify that the variable is not modifiable
-		  auto r = x + y;
-		  active_delay(1); // add a delay of 1 msec
-		  return(r);
+			auto r = x + y;
+			active_delay(1); // add a delay of 1 msec
+			return(r);
 		};
 
 		//accumulate the operation oplus from the begin to the end of the vector
-    auto res = std::accumulate(v.begin(), v.end(), 0, oplus);
-    std::cout << res << std::endl;
+		auto res = std::accumulate(v.begin(), v.end(), 0, oplus);
+		std::cout << res << std::endl;
   }
-  return(0);
+	return(0);
 }
