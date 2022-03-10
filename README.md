@@ -27,8 +27,8 @@ git pull
 
 # Sequential compile (example):
 
-g++ -O3 -o redseq redseq.cpp
+g++ -O3 -o redseq redseq.cpp dependency_files
 
 # Parallel compile (example):
 
-g++ -O3 -pthread -o redpar redpar.cpp 
+g++ -O3 -pthread -o redpar redpar.cpp dependency_files
