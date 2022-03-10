@@ -1,28 +1,28 @@
-# TO CONNECT TO UNIPI VPN
+# To connect to unipi VPN
 
-netExtender 
-Server: access.unipi.it 
-User: alice 
-Password: alice 
-Domain: 131.114.21.15, 131.114.21.25 
+netExtender  
+Server: access.unipi.it  
+User: alice  
+Password: alice  
+Domain: 131.114.21.15, 131.114.21.25
 
-# TO CONNECT TO THE REMOTE MACHINE (ssh key just generated):
+# To connect to the remote machine (ssh key just generated):
 
 ssh -i ~/.ssh/spm_server unipi_username@131.114.22.228
 
-# TO CONNECT WITH PASSWORD
+# To connect with user identification
 
 ssh unipi_username@131.114.22.228
 
-# GIT PULL:
+# Git pull:
 
-cd SPM_lab/ 
+cd SPM_lab/  
 git pull
 
-# COMPILE (example):
+# Sequential compile (example):
 
 g++ -O3 -o redseq redseq.cpp
 
-# PARALLEL COMPILE:
+# Parallel compile (example):
 
 g++ -O3 -pthread -o redpar redpar.cpp 
