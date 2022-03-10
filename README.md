@@ -1,4 +1,13 @@
+
+
 # To connect to unipi VPN
+
+## Launch netExtenderGui
+
+cd /usr/lib  
+java -jar NetExtender.jar
+
+### To connect
 
 netExtender  
 Server: access.unipi.it  
