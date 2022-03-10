@@ -2,18 +2,15 @@
 
 # To connect to unipi VPN
 
-## Launch netExtenderGui
+## Launch ConnectTunnel (gui version)
 
-cd /usr/lib  
-java -jar NetExtender.jar
+startctui
 
 ### To connect
 
-netExtender  
-Server: access.unipi.it  
 User: alice  
 Password: alice  
-Domain: 131.114.21.15, 131.114.21.25
+
 
 # To connect to the remote machine (ssh key just generated):
 
