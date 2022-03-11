@@ -25,10 +25,14 @@ ssh unipi_username@131.114.22.228
 cd SPM_lab/  
 git pull
 
-# Sequential compile (example):
+# Sequential compile in remote machone (example):
 
 g++ -O3 -o redseq redseq.cpp dependency_files
 
-# Parallel compile (example):
+# Parallel compile in remote machine (example):
 
 g++ -O3 -pthread -o redpar redpar.cpp dependency_files
+
+# Compile in local machine:
+
+g++-11 ...
