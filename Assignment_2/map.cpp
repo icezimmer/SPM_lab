@@ -10,10 +10,11 @@
 
 using namespace std;
 
-vector<int> create_random_vector(int n, int max) {
-    vector<int> v(n);
+vector<float> create_random_vector(int n, int max, int seed) {
+    srand(seed);
+    vector<float> v(n);
     for(int i=0; i<n; i++) {
-        v[i] = rand() % max;
+        v[i] =  static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max)));;
     }
     return v;
 }
@@ -76,6 +77,7 @@ void compute_async(function<void(int)> fun, int nw) {
     return;
 }
 
+// in general auto ...
 vector<pair<int,int>> make_chunks(int n, int nw) {
     utimer ovh("Overhead");
     vector<pair<int,int>> chunks(nw);
@@ -90,7 +92,7 @@ vector<pair<int,int>> make_chunks(int n, int nw) {
     return chunks;
 }
 
-int odouble(int x) {
+float map(float x) {
     active_delay(1);
     return 2 * x;
 }
@@ -107,17 +109,18 @@ int main(int argc, char **argv) {
     int nw   = atoi(argv[3]);
     int seed = atoi(argv[4]);
 
-    vector<int> v = create_random_vector(n, max);
-    vector<int> res(n);
+    vector<float> v = create_random_vector(n, max, seed);
+    vector<float> res(n);
 
     {
         utimer tim("Parallel computation");
 
         vector<pair<int,int>> chunks = make_chunks(n, nw);
 
-        auto body = [&] (int j) {
+        // lambda function for the thread
+        function<void(int)> body = [&] (int j) {
             for(int i=chunks[j].first; i<=chunks[j].second; i++)
-	            res[i] = odouble(v[i]);
+	            res[i] = map(v[i]);
             return;
         };
 
