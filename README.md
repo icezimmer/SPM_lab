@@ -44,3 +44,7 @@ g++-11 ...
 ## Assignment 1 (March 9):
 
 Evaluate overhead needed to start/join a thread and to start an async (launch::async policy) and get the result of the computed future. Measures should be taken as averages of a large number of events. Possibly, measure times on your machine AND on the remote virtual machine.To be completed by next Tue, March 15 (ideally).
+
+## Assignment 2 (March 16):
+
+Provide a vector<float> map(vector<float>v, int mode, function<float(float)> f, int pardegree) computing in parallel (using C++ threads or asyncs) the map(f) over v. Mode is 0 (block) or 1 (cyclic) scheduling.  To be completed by next Tue, March 22 (ideally).

@@ -6,6 +6,7 @@
 # include <chrono>
 # include <utility>
 # include <functional>
+# include <string>
 # include "utimer.cpp"
 
 using namespace std;
@@ -32,7 +33,7 @@ void active_delay(int msecs) {
     return;
 }
 
-void reading_vector(vector<int> v) {
+void read_vector(vector<float> v) {
     utimer read("Reading");
     for(int i=0; i<v.size(); i++)
         cout << "v[" << i << "] is " << v[i] << endl;
@@ -46,7 +47,7 @@ void check_chunks(vector<pair<int,int>> chunks) {
     return;
 }
 
-void check_results(vector<int> res){
+void check_results(vector<float> res){
     utimer checkt("Checking results");
     for(int i=0; i<res.size(); i++)
         cout << "res[" << i << "] is " << res[i] << endl;
@@ -77,9 +78,7 @@ void compute_async(function<void(int)> fun, int nw) {
     return;
 }
 
-// in general auto ...
 vector<pair<int,int>> make_chunks(int n, int nw) {
-    utimer ovh("Overhead");
     vector<pair<int,int>> chunks(nw);
     int chunk_size = n / nw;
     for(int i=0; i<nw; i++) {
@@ -92,40 +91,55 @@ vector<pair<int,int>> make_chunks(int n, int nw) {
     return chunks;
 }
 
-float map(float x) {
-    active_delay(1);
-    return 2 * x;
+vector<float> map(vector<float> v, function<float(float)> f, int nw, bool chunks, bool th) {
+    vector<float> res(v.size());
+    if(chunks) {
+        utimer ch("Parallel computing using chunks");
+        vector<pair<int,int>> chunks = make_chunks(v.size(), nw);
+        function<void(int)> body = [&] (int j) {
+            for(int i=chunks[j].first; i<=chunks[j].second; i++)
+	            res[i] = f(v[i]);
+            return;
+        };
+        if(th)
+            compute_thread(body, nw);
+        else
+            compute_async(body, nw);
+    }
+    else {
+        utimer rr("Parallel computing using round-robin");
+        function<void(int)> body = [&] (int j) {
+            for(int i=j; i<v.size(); i+=nw)
+	            res[i] = f(v[i]);
+            return;
+        };
+        if(th)
+            compute_thread(body, nw);
+        else
+            compute_async(body, nw);
+    }
+    return res;
 }
 
 int main(int argc, char **argv) {
   
-    if(argc == 1) {
-        cout << "Usage is: " << argv[0] << " v-len max-v n-worker seed " << endl;
+    if(argc != 7) {
+        cout << "Usage is: " << argv[0] << " v-len max-v seed n-worker chunks/round-robin thread/async " << endl;
         return(0);
     }
 
-    int n    = atoi(argv[1]);
-    int max  = atoi(argv[2]);
-    int nw   = atoi(argv[3]);
-    int seed = atoi(argv[4]);
+    int  n      = atoi(argv[1]);
+    int  max    = atoi(argv[2]);
+    int  seed   = atoi(argv[3]);
+    int  nw     = atoi(argv[4]);
+    bool chunks = atoi(argv[5]);
+    bool th     = atoi(argv[6]);
 
     vector<float> v = create_random_vector(n, max, seed);
-    vector<float> res(n);
 
-    {
-        utimer tim("Parallel computation");
+    function<float(float)> f = [] (float x) { active_delay(1); return 2 * x; };
 
-        vector<pair<int,int>> chunks = make_chunks(n, nw);
-
-        // lambda function for the thread
-        function<void(int)> body = [&] (int j) {
-            for(int i=chunks[j].first; i<=chunks[j].second; i++)
-	            res[i] = map(v[i]);
-            return;
-        };
-
-        compute_thread(body, nw);
-    }
+    vector<float> res = map(v, f, nw, chunks, th);
 
     return 0;
 }
