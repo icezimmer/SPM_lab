@@ -39,6 +39,10 @@ g++ -O3 -pthread -o redpar redpar.cpp dependency_files
 
 g++-11 ...
 
+## Compile with the standard c++20 (e.g. to use barrier)
+
+g++-11/g++ -std=c++20 ...
+
 # Assignments:
 
 ## Assignment 1 (March 9):
