@@ -15,7 +15,6 @@ void compute_thread(function <void(int)> fun, int nw) {
     vector<thread*> tids(nw);
     for(int worker=0; worker<nw; worker++)
         tids[worker] = new thread(fun, worker);
-    return;
     // Await their termination 
     for(int worker=0; worker<nw; worker++)
         tids[worker]->join();
