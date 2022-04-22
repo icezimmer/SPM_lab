@@ -19,11 +19,12 @@ private:
   std::queue<QTYPE> q;
   std::mutex m;
   std::condition_variable c; 
+  
 public:
 
   QTYPE pop()  {
     std::unique_lock<std::mutex> l(m);
-    c.wait(l, [&]{ return !q.empty(); });
+    c.wait(l, [&]{ return !q.empty(); }); // wait until q is not empty
     QTYPE ret = q.front();
     q.pop();
     return ret;

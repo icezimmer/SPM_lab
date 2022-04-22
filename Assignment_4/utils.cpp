@@ -17,11 +17,3 @@ void active_delay(int msecs) {
     }
     return;
 }
-
-void read_vector(vector<int> v) {
-    utimer read("Reading");
-    for(int i=0; i<v.size(); i++)
-        cout << v[i] << " ";
-    cout << endl;
-    return;
-}
