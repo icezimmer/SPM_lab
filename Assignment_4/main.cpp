@@ -31,13 +31,19 @@ int main(int argc, char **argv) {
             return res;
         };
 
-    for(int i=0;i<max;i++){
-        active_delay(ta);
-        cout << "Task " << i << endl;
-        tp.submit(bind(f,i));
-    }
+    auto input_streaming = [&] (int max) {
+        for(int i=0;i<max;i++){
+            active_delay(ta);
+            cout << "Task " << i << endl;
+            tp.submit(bind(f,i));
+        }
+    };
 
+    thread tid_str(input_streaming, max);
+    tid_str.join();
+    
     tp.execute();
+    //tid_str.join();
 
     return 0;
 }
