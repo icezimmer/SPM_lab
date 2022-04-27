@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <vector>
 #include <functional>
 #include <memory>
 #include <thread>
@@ -6,46 +7,48 @@
 #include "utimer.cpp"
 #include "sharedqueue.cpp"
 
-//#define EOS -1
+#define EOS -1
 
 using namespace std;
 
 int main(int argc, char **argv) {
   
     if(argc != 4) {
-        cout << "Usage is: " << argv[0] << " max-value time_arrival time_computation " << endl;
+        cout << "Usage is: " << argv[0] << " max-value par1 par2 " << endl;
         return -1;
     }
 
     int max   = atoi(argv[1]);
-    int ta    = atoi(argv[2]);
-    int tf    = atoi(argv[3]);
+    int a  = atoi(argv[2]);
+    int b  = atoi(argv[3]);
 
-    function<float(float)> f = [&] (float x) { 
-        active_delay(tf);
-        float res = x * x;
+    auto f = [&] (int x, int a, int b) { 
+        active_delay(1000);
+        auto res = (x + a) * b;
         cout << res << endl;
         return res;
         };
 
-    sharedQueue<function<float(void)>> q;
+    auto f_ab = bind(f, placeholders::_1, a, b);
+
+    sharedQueue<int> q;
 
     auto input_streaming = [&] (int max) {
         for(int i=0;i<max;i++){
-            active_delay(ta);
+            active_delay(100);
             cout << "Task " << i << endl;
-            q.push(bind(f, i));
+            q.push(i);
         }
-        //q.push(EOS);
+        q.push(EOS);
     };
 
     auto work = [&] () {
         while(true) {
             auto item = q.pop();
-            //if(item == EOS) {
-            //    break;
-            //}
-            item();
+            if(item == EOS) {
+                break;
+            }
+           f_ab(item); 
         }
     };
 

@@ -13,6 +13,7 @@
 #include <functional>
 #include <memory>
 #include <vector>
+#include <future>
 
 
 using namespace std;
@@ -20,8 +21,9 @@ using namespace std;
 class threadPool {
 
 private:
-    queue<function<float(void)>> tasks;
-    vector<thread> threads;
+    queue<packaged_task<void(void)>> tasks; // by packaged task we can get a future
+    vector<future<void>> vf; // future of the tasks
+    vector<thread> threads; // vector of threads (nm. of threads = size)
     mutex m;
     condition_variable c;
     int size;
@@ -29,12 +31,12 @@ private:
 
     void body() {
         while(true) {
-            function<float(void)> tsk=[](){return 0;}; //dummy initialization
+            packaged_task<void(void)> tsk; //initialization
             {
                 unique_lock<mutex> l(this->m);
                 this->c.wait(l, [&](){ return (!this->tasks.empty() || this->stop); }); // wait until queue is not empty or the threadpool is stopped
                 if(!this->tasks.empty()){
-                    tsk = this->tasks.front();
+                    tsk = move(this->tasks.front());
                     this->tasks.pop();
                 }
                 if(this->stop) return;    
@@ -56,14 +58,15 @@ public:
     threadPool(int size) {
         this->size = size;
         this->stop = false;
+        // i task vengono assegnati al thread pool nel costruttore affinché siano eseguibili appena entrano nella coda
         for(int worker=0; worker<this->size; worker++)
             this->threads.emplace_back([this](){ this->body(); });
     }
 
     ~threadPool() {
-        string line;
-        cout << "Terminate?" << endl;
-        cin >> line;
+        //in this way i'm sure that all the result has been computed before that stop is setted to true
+        for(int i=0;i<vf.size();i++)
+            this->vf[i].get();
 
         stopThreadPool();
 
@@ -71,13 +74,14 @@ public:
             thread.join();
     }
 
-    void submit(function<float(void)> f) {
+    void submit(function<void(void)> fx) {
         {
             unique_lock<mutex> l(this->m);
-            this->tasks.push(f);
+            packaged_task<void(void)> pt(fx);
+            this->vf.push_back(pt.get_future());
+            this->tasks.push(move(pt));
         }
         this->c.notify_one();
     }
-
   
 };
