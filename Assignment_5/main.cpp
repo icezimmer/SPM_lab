@@ -2,18 +2,8 @@
 #include <functional>
 #include <thread>
 #include <omp.h>
-#include "sharedqueue.cpp"
 #include "utils.cpp"
 #include "utimer.cpp"
-
-/*void f(float x, int tf) { 
-    #pragma omp task {
-        active_delay(tf);
-        float res = x * x;
-        cout << res << endl;
-    }
-    return;
-}*/
 
 int main(int argc, char **argv) {
   
