@@ -50,7 +50,7 @@ void odd_even_sort_sequential(vector<int> &v) {
 void odd_even_sort_parallel(vector<int> &v, int nw) {
     vector<pair<int,int>> ochunks = overlapped_chunks(v.size(), nw, 1);
     //check_chunks(ochunks);
-        bool sorted = false; // doesn't need any protection mechanism because can be set only to false (in other cases use atomic var.)
+    bool sorted = false; // doesn't need any protection mechanism because can be set only to false (in other cases use atomic var.)
     auto callback_odd = [&] () {
         sorted = true; // now we are sure that all threads runned the code before the barrier 
         //static auto phase = "... odd phase done\n" "Cleaning up...\n";

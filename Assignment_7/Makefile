@@ -2,7 +2,7 @@ ifndef FF_ROOT
 FF_ROOT		= $(HOME)/fastflow
 endif
 
-CXX		= g++-11 -std=c++17  #-DNO_DEFAULT_MAPPING
+CXX		= g++-11 -std=c++20  #-DNO_DEFAULT_MAPPING
 INCLUDES	= -I $(FF_ROOT) 
 CXXFLAGS  	= -Wall
 
