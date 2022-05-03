@@ -1,17 +1,23 @@
-CXX		= g++-11 -std=c++17  #-DNO_DEFAULT_MAPPING
-CXXFLAGS = -Wall
+ifndef FF_ROOT
+FF_ROOT		= $(HOME)/fastflow
+endif
 
-LDFLAGS 	= -pthread -fopenmp
+CXX		= g++-11 -std=c++17  #-DNO_DEFAULT_MAPPING
+INCLUDES	= -I $(FF_ROOT) 
+CXXFLAGS  	= -Wall
+
+LDFLAGS 	= -pthread
 OPTFLAGS	= -O3 -finline-functions -DNDEBUG
 
-TARGETS = main \ main2
+TARGETS		=  main
+
 
 .PHONY: all clean cleanall
 .SUFFIXES: .cpp 
 
 
 %: %.cpp
-	$(CXX) $(CXXFLAGS) $(OPTFLAGS) -o $@ $< $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OPTFLAGS) -o $@ $< $(LDFLAGS)
 
 all		: $(TARGETS)
 
