@@ -98,3 +98,7 @@ static bool is_prime(ull n) {
 }
 
 Consider your favorite parallel programming framework among the ones we've seen so far (C++ native threads, OpenMP, GrPPI) and possibly implement more that one version (e.g. a native C++ and an OpenMP version) comparing the relative performances.
+
+## Assignment 7 (May 3): 
+
+Write a parallel program getting a vector of n floating point numbers with first position 0.0, last position 100.0 and intermediate position 25.0 and computing (in parallel) k iterations each re-computing position i in the vector (i in [1,n-2]) as the average of previous values of positions i, i-1 and i+1 (positions 0 and n never change). Two versions are required, one using FastFlow and the other one using any other framework (C++ threads, OpenMP, GrPPi).
