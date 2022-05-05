@@ -74,7 +74,8 @@ int main(int argc, char **argv) {
     {    
         utimer myprime("OpenMP parallel", &t_omp);
 
-        #pragma parallel for num_thread(nw)
+        omp_set_num_threads(nw);
+        #pragma omp parallel for
         for(int i=left; i<=right; i++) {
             if(isPrime(i)){
                 #pragma omp critical

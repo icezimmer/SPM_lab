@@ -2,10 +2,18 @@
 #include <vector>
 #include <functional>
 #include <thread>
-#include <barrier>
+//#include <barrier>
+//#include <future>
+//#include <utility>
+//#include <mutex>
+//#include <condition_variable>
+//#include <omp.h>
+//#include "utils.cpp"
 #include "utimer.cpp"
+#include <ff/ff.hpp>
 
 using namespace std;
+using namespace ff;
 
 vector<float> start_v(int n) {
     vector<float> v(n);
@@ -64,37 +72,7 @@ int main(int argc, char** argv) {
     if(debug)
         read_v(v);
 
-    vector<pair<int,int>> ochunks = overlapped_chunks(n, nw, 1);
 
-    if(debug)
-        check_chunks(ochunks);
-
-    auto callback = [] () { return; };
-    barrier sync_point(nw, callback);
-
-    auto body = [&] (int worker) {
-        int it = 0;
-        while(it < k){
-            for(int i=ochunks[worker].first+1; i<=ochunks[worker].second-1; i++)
-                buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3;
-            // Wait all 
-            sync_point.arrive_and_wait();
-            v = buffer;
-            it = it+1;
-        }
-    };
-
-    {   
-        utimer parnat("Native parallel"); 
-
-        vector<thread> threads;
-
-        for(int worker=0; worker<nw; worker++)
-            threads.emplace_back(body, worker);
-
-        for(auto& thread : threads)
-            thread.join();
-    }
 
     if(debug)
         read_v(v);

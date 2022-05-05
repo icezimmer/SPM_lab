@@ -6,10 +6,10 @@ CXX		= g++-11 -std=c++20  #-DNO_DEFAULT_MAPPING
 INCLUDES	= -I $(FF_ROOT) 
 CXXFLAGS  	= -Wall
 
-LDFLAGS 	= -pthread
+LDFLAGS 	= -pthread -fopenmp
 OPTFLAGS	= -O3 -finline-functions -DNDEBUG
 
-TARGETS		=  main
+TARGETS		=  main / mainomp / mainalt
 
 
 .PHONY: all clean cleanall
