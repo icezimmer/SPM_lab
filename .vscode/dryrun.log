@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/profeta/SPM/SPM_lab'
+make: Leaving directory '/home/profeta/SPM/SPM_lab'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

@@ -34,7 +34,7 @@ vector<pair<int,int>> overlapped_chunks(int n, int nw, int over) {
         if(i!=0 && i!=nw-1)
             chunks[i] = make_pair(i*chunk_size-over, (i+1)*chunk_size-1+over);
         else if(i==0)
-            chunks[i] = make_pair(i*chunk_size, (i+1)*chunk_size-1+over);
+            chunks[i] = nw > 1 ? make_pair(i*chunk_size, (i+1)*chunk_size-1+over) : make_pair(0, n-1);
         else if(i==nw-1)
             chunks[i] = make_pair(i*chunk_size-over, n-1);
     }

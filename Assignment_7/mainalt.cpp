@@ -29,7 +29,7 @@ void read_v(vector<float> &v) {
 
 vector<vector<float>> split_v(vector<float> v, int nw) {
     vector<vector<float>> vth(nw);
-    int split_size = v.size() / nw;
+    int split_size = v.size()/nw;// >= 3 ? v.size()/nw : 3;
     for(int i=0; i<nw; i++) {
         if(i!=0 && i!=nw-1)
             for(int j=i*split_size-1; j<=(i+1)*split_size-1+1; j++)
@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
     };
 
     {   
-        utimer parnat("Native parallel"); 
+        utimer parnat("Alternative native parallel"); 
 
         vector<thread> threads;
 

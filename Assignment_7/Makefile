@@ -9,7 +9,7 @@ CXXFLAGS  	= -Wall
 LDFLAGS 	= -pthread -fopenmp
 OPTFLAGS	= -O3 -finline-functions -DNDEBUG
 
-TARGETS		=  main / mainomp / mainalt
+TARGETS		=  mainpar / mainomp / mainalt
 
 
 .PHONY: all clean cleanall
