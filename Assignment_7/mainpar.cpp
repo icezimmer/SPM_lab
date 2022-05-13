@@ -8,9 +8,8 @@
 using namespace std;
 
 vector<float> start_v(int n) {
-    vector<float> v(n);
+    vector<float> v(n, 25.0);
     v[0] = 0.0;
-    v[n/2] = 25.0;
     v[n-1] = 100.0;
     return v;
 }
@@ -72,14 +71,20 @@ int main(int argc, char** argv) {
     auto callback = [] () { return; };
     barrier sync_point(nw, callback);
 
+    // To avoid copy buffer to v at each iteration we apply the stencil alternately to v and buffer
     auto body = [&] (int worker) {
         int it = 0;
         while(it < k){
             for(int i=ochunks[worker].first+1; i<=ochunks[worker].second-1; i++)
-                buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3;
+                buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3.0;
             // Wait all 
             sync_point.arrive_and_wait();
-            v = buffer;
+            it = it + 1;
+
+            for(int i=ochunks[worker].first+1; i<=ochunks[worker].second-1; i++)
+                v[i] = (buffer[i-1] + buffer[i] + buffer[i+1]) / 3.0;
+            // Wait all 
+            sync_point.arrive_and_wait();
             it = it+1;
         }
     };
@@ -96,8 +101,12 @@ int main(int argc, char** argv) {
             thread.join();
     }
 
-    if(debug)
-        read_v(v);
+    if(debug) {
+        if(k%2 ==0)
+            read_v(v);
+        else
+            read_v(buffer);
+    }
 
     return 0;
 }

@@ -2,23 +2,16 @@
 #include <vector>
 #include <functional>
 #include <thread>
-//#include <barrier>
-//#include <future>
-//#include <utility>
-//#include <mutex>
-//#include <condition_variable>
-//#include <omp.h>
-//#include "utils.cpp"
 #include "utimer.cpp"
 #include <ff/ff.hpp>
+#include <ff/parallel_for.hpp>
 
 using namespace std;
 using namespace ff;
 
 vector<float> start_v(int n) {
-    vector<float> v(n);
+    vector<float> v(n, 25.0);
     v[0] = 0.0;
-    v[n/2] = 25.0;
     v[n-1] = 100.0;
     return v;
 }
@@ -72,10 +65,39 @@ int main(int argc, char** argv) {
     if(debug)
         read_v(v);
 
+    {
+        utimer paromp("FastFlow parallel");
 
+        // Create the object ParallelFor
+        ParallelFor pf(nw, true); // param spinwaittrue: true non blocking, false blocking.
 
-    if(debug)
-        read_v(v);
+        int it = 0;
+        while(it < k){
+            
+            pf.parallel_for(1,n-1,1,0,
+                [&] (const int i) {
+                    for(int i=1; i<n-1; i++)
+                        buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3.0;
+                    });
+            // implicit barrier
+            it = it + 1;
+
+            pf.parallel_for(1,n-1,1,0,
+                [&] (const int i) {
+                    for(int i=1; i<n-1; i++)
+                        v[i] = (buffer[i-1] + buffer[i] + buffer[i+1]) / 3.0;
+                    });
+            // implicit barrier
+            it = it+1;
+        }
+    }
+
+    if(debug) {
+        if(k%2 ==0)
+            read_v(v);
+        else
+            read_v(buffer);
+    }
 
     return 0;
 }

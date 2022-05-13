@@ -8,9 +8,8 @@
 using namespace std;
 
 vector<float> start_v(int n) {
-    vector<float> v(n);
+    vector<float> v(n, 25.0);
     v[0] = 0.0;
-    v[n/2] = 25.0;
     v[n-1] = 100.0;
     return v;
 }
@@ -52,17 +51,27 @@ int main(int argc, char** argv) {
         while(it < k){
 
             omp_set_num_threads(nw);
+            
             #pragma omp parallel for
             for(int i=1; i<n-1; i++)
-                buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3;
+                buffer[i] = (v[i-1] + v[i] + v[i+1]) / 3.0;
+            // implicit barrier
+            it = it + 1;
 
-            v = buffer;
+            #pragma omp parallel for
+            for(int i=1; i<n-1; i++)
+                v[i] = (buffer[i-1] + buffer[i] + buffer[i+1]) / 3.0;
+            // implicit barrier
             it = it+1;
         }
     }
 
-    if(debug)
-        read_v(v);
+    if(debug) {
+        if(k%2 ==0)
+            read_v(v);
+        else
+            read_v(buffer);
+    }
 
     return 0;
 }

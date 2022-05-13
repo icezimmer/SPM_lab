@@ -4,7 +4,8 @@ CXXFLAGS = -Wall
 LDFLAGS 	= -pthread -fopenmp
 OPTFLAGS	= -O3 -finline-functions -DNDEBUG
 
-TARGETS = main \ main2
+TARGETS =   main \ 
+			main2
 
 .PHONY: all clean cleanall
 .SUFFIXES: .cpp 
