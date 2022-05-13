@@ -28,26 +28,6 @@ void read_v(vector<float> &v) {
     return;
 }
 
-vector<pair<int,int>> overlapped_chunks(int n, int nw, int over) {
-    vector<pair<int,int>> chunks(nw);
-    int chunk_size = n / nw;
-    for(int i=0; i<nw; i++) {
-        if(i!=0 && i!=nw-1)
-            chunks[i] = make_pair(i*chunk_size-over, (i+1)*chunk_size-1+over);
-        else if(i==0)
-            chunks[i] = make_pair(i*chunk_size, (i+1)*chunk_size-1+over);
-        else if(i==nw-1)
-            chunks[i] = make_pair(i*chunk_size-over, n-1);
-    }
-    return chunks;
-}
-
-void check_chunks(vector<pair<int,int>> chunks) {
-    for(int i=0; i<chunks.size(); i++)
-        cout << "chunk " << i << " is " << chunks[i].first << "," << chunks[i].second << endl;
-    return;
-}
-
 int main(int argc, char** argv) {
     if (argc!=4 && argc!=5) {
         cout << "Usage is: " << argv[0]  << " n k debug [nworkers] " << endl;

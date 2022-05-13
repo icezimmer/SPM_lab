@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 13 18:03:21 2022
+# Make data base, printed on Fri May 13 18:05:49 2022
 
 # Variables
 
@@ -117,7 +117,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /tmp/ssh-0tWNlLDQk6Aq/agent.3178
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 22428
+GIO_LAUNCHED_DESKTOP_FILE_PID = 24955
 # automatic
 %F = $(notdir $%)
 # environment
@@ -195,7 +195,7 @@ SHLVL = 1
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1001/vscode-ipc-ff66d61d-68fa-4258-93af-f3fb686c6c40.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1001/vscode-ipc-75f73283-d807-4f8d-8513-65bf504bc90e.sock
 # environment
 XDG_SESSION_ID = 3
 # environment
@@ -266,7 +266,6 @@ CHROME_DESKTOP = code-url-handler.desktop
 WINDOWPATH = 2
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
- 
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # default
@@ -274,10 +273,11 @@ GJS_DEBUG_OUTPUT = stderr
 # environment
 LANG = C
 # environment
-VSCODE_PID = 22478
+VSCODE_PID = 25009
 # environment
 _CE_CONDA = 
 # variable set hash-table stats:
+ 
 # Load=132/1024=13%, Rehash=0, Collisions=21/154=14%
 
 # Pattern-specific Variable Values
@@ -344,6 +344,6 @@ GNUmakefile:
 # strcache performance: lookups = 29 / hit rate = 10%
 # hash-table stats:
 # Load=26/8192=0%, Rehash=0, Collisions=1/29=3%
-# Finished Make data base on Fri May 13 18:03:21 2022
+# Finished Make data base on Fri May 13 18:05:49 2022
 
  
